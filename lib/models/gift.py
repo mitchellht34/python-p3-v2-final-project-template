@@ -49,3 +49,26 @@ class Gift:
             raise ValueError(
                 "recipient_id must reference a recipient in the database"
             )
+
+    @classmethod
+    def create_table(cls):
+        """ Create a new table to persist the attributes of Gift instances """
+        sql = """
+            CREATE TABLE IF NOT EXISTS gifts (
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            price REAL,
+            recipient_id INTEGER,
+            FOREIGN KEY (recipient_id) REFERENCES recipients(id))
+        """
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    @classmethod
+    def drop_table(cls):
+        """ Drop the table that persists Gift instances """
+        sql = """
+            DROP TABLE IF EXISTS gifts;
+        """
+        CURSOR.execute(sql)
+        CONN.commit()
