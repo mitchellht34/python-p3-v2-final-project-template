@@ -117,3 +117,17 @@ class Recipient:
         
         row = CURSOR.execute(sql, (id,)).fetchone()
         return cls.instance_from_db(row) if row else None
+
+    def gifts(self):
+        """ Return list of gifts associated with current recipient """
+        from models.gift import Gift
+        sql = """
+            SELECT * FROM gifts
+            WHERE recipient_id = ?
+        """
+        CURSOR.execute(sql, (self.id,))
+
+        rows = CURSOR.fetchall()
+        return [
+            Gift.instance_from_db(row) for row in rows
+        ]
