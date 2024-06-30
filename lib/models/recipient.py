@@ -27,8 +27,7 @@ class Recipient:
         sql = """
             CREATE TABLE IF NOT EXISTS recipients (
             id INTEGER PRIMARY KEY,
-            name TEXT,
-            location TEXT)
+            name TEXT)
         """
         CURSOR.execute(sql)
         CONN.commit()
@@ -81,13 +80,13 @@ class Recipient:
 
     @classmethod
     def instance_from_db(cls, row):
-        """ Return a Department object having the attribute values from the table row """
+        """ Return a Recipient object having the attribute values from the table row """
 
         # Check the dictionary for an existing instance using the row's primary key
         recipient = cls.all.get(row[0])
         if recipient:
             # ensure attributes match row values in case local instance was modified
-            department.name = row[1]
+            recipient.name = row[1]
         else:
             # not in dictionary, create new instance and add to dictionary
             recipient = cls(row[1],)
