@@ -37,4 +37,15 @@ class Gift:
                 "price should be a price"
             )
 
+    @property
+    def recipient_id(self):
+        return self._recipient_id
     
+    @recipient_id.setter
+    def recipient_id(self, recipient_id):
+        if type(recipient_id) is int and Recipient.find_by_id(recipient_id):
+            self._recipient_id = recipient_id
+        else:
+            raise ValueError(
+                "recipient_id must reference a recipient in the database"
+            )
