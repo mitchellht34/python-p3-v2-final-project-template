@@ -9,6 +9,7 @@ def show_recipients():
     for i, recipient in enumerate(recipients, start=1):
         print(f"{i}. {recipient.name}")
     print("------------------------------")
+    return recipients
 
 
 def show_gifts(recipient):

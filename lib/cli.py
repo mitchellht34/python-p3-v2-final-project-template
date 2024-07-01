@@ -1,7 +1,7 @@
 # lib/cli.py
 from models.recipient import Recipient
 from models.gift import Gift
-# import ipdb
+import ipdb
 from helpers import (
     exit_program,
     show_recipients,
@@ -26,7 +26,7 @@ def main():
 
 def top_menu():
     while True:
-        show_recipients()
+        recipients = show_recipients()
         print("Please select the number of the recipient to see their gifts")
         print("OR")
         print("Type 'a' to add a new recipient")
@@ -34,6 +34,7 @@ def top_menu():
         print("Type 'e' to exit the program")
         print("------------------------------")
         choice = input("> ")
+        ipdb.set_trace()
         try:
             choice = int(choice)
         except Exception as exc:
@@ -45,7 +46,8 @@ def top_menu():
         elif choice == "e":
             exit_program()
         elif isinstance(choice, int) and choice <= len(Recipient.get_all()):
-            recipient = Recipient.find_by_id(int(choice))
+            recipient_id = Recipient.get_all()[choice-1].id
+            recipient = Recipient.find_by_id(recipient_id)
             recipient_menu(recipient)
         else:
             print('Invalid choice')
@@ -80,6 +82,7 @@ def recipient_menu(recipient):
         elif choice == "e":
             exit_program()
         elif isinstance(choice, int) and choice <= len(recipient.gifts()):
+            ipdb.set_trace()
             gift_menu(choice, recipient)
         else:
             print('Invalid choice')
