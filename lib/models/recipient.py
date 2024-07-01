@@ -131,3 +131,9 @@ class Recipient:
         return [
             Gift.instance_from_db(row) for row in rows
         ]
+
+    def gift_total(self):
+        sum = 0
+        for gift in self.gifts():
+            sum += gift.price
+        return sum
