@@ -133,7 +133,8 @@ class Recipient:
         ]
 
     def gift_total(self):
-        sum = 0
-        for gift in self.gifts():
-            sum += gift.price
-        return sum
+        return sum([gift.price for gift in self.gifts()])
+        # sum = 0
+        # for gift in self.gifts():
+        #     sum += gift.price
+        # return sum

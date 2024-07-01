@@ -1,7 +1,7 @@
 # lib/helpers.py
 from models.recipient import Recipient
 from models.gift import Gift
-import ipdb
+# import ipdb
 
 def top_menu():
     x = True
@@ -40,6 +40,7 @@ def show_gifts(recipient):
     gifts = recipient.gifts()
     for i, gift in enumerate(gifts, start=1):
         print(f"{i}. {gift.name}")
+    return gifts
 
 
 def create_recipient():
@@ -62,6 +63,7 @@ def create_gift(recipient_id):
 
 
 def delete_recipient(recipient):
+    # delete gifts first
     recipient.delete()
     print(f"{recipient.name} deleted")
 
@@ -76,8 +78,8 @@ def recipient_menu(recipient):
     while x:
         print("------------------------------")
         print(f"{recipient.name}'s Gifts: \n")
-        show_gifts(recipient)
-        print(f'\nTotal: ${"%.2f" % recipient.gift_total()}')
+        gifts = show_gifts(recipient)
+        print(f'\nTotal: ${"%.2f" % sum([gift.price for gift in gifts])}')
         print("\nPlease select the number of the recipient to see their gifts")
         print("OR")
         print("Type 'a' to add a new gift")
@@ -92,7 +94,7 @@ def recipient_menu(recipient):
         if choice == 'a':
             create_gift(recipient.id)
         elif choice == 'b':
-            x = False
+            top_menu()
         elif choice == 'd':
             delete_recipient(recipient)
             x = False
@@ -120,8 +122,6 @@ def gift_menu(index, recipient):
             delete_gift(gift)
             x = False
 
-
-  
 
 
 def exit_program():
