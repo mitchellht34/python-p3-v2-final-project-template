@@ -1,7 +1,7 @@
 # lib/cli.py
 from models.recipient import Recipient
 from models.gift import Gift
-import ipdb
+# import ipdb
 from helpers import (
     exit_program,
     show_recipients,
@@ -31,6 +31,7 @@ def top_menu():
         print("OR")
         print("Type 'a' to add a new recipient")
         print("Type 'b' to go back")
+        print("Type 'e' to exit the program")
         print("------------------------------")
         choice = input("> ")
         try:
@@ -41,6 +42,8 @@ def top_menu():
             create_recipient()
         elif choice == 'b':
             main()
+        elif choice == "e":
+            exit_program()
         elif isinstance(choice, int) and choice <= len(Recipient.get_all()):
             recipient = Recipient.find_by_id(int(choice))
             recipient_menu(recipient)
@@ -59,6 +62,7 @@ def recipient_menu(recipient):
         print("Type 'a' to add a new gift")
         print("Type 'b' to go back")
         print("Type 'd' to delete recipient")
+        print("Type 'e' to exit the program")
         print("------------------------------")
         choice = input("> ")
         # ipdb.set_trace()
@@ -73,6 +77,8 @@ def recipient_menu(recipient):
         elif choice == 'd':
             delete_recipient(recipient)
             top_menu()
+        elif choice == "e":
+            exit_program()
         elif isinstance(choice, int) and choice <= len(recipient.gifts()):
             gift_menu(choice, recipient)
         else:
@@ -88,6 +94,7 @@ def gift_menu(index, recipient):
         print("OR")
         print("Type 'b' to go back")
         print("Type 'd' to delete gift")
+        print("Type 'e' to exit the program")
         print("------------------------------")  
         choice = input("> ")
         if choice == 'b':
@@ -95,6 +102,8 @@ def gift_menu(index, recipient):
         elif choice == 'd':
             delete_gift(gift)
             recipient_menu(recipient)
+        elif choice == "e":
+            exit_program()
         else:
             print('Invalid choice')
 
