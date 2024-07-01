@@ -118,6 +118,18 @@ class Recipient:
         row = CURSOR.execute(sql, (id,)).fetchone()
         return cls.instance_from_db(row) if row else None
 
+    @classmethod
+    def find_by_name(cls, name):
+        """ Return a Recipient object corresponding to first table row matching specified name """
+        sql = """
+            SELECT *
+            FROM recipients
+            WHERE name is ?
+        """
+
+        row = CURSOR.execute(sql, (name,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+
     def gifts(self):
         """ Return list of gifts associated with current recipient """
         from models.gift import Gift
@@ -131,10 +143,3 @@ class Recipient:
         return [
             Gift.instance_from_db(row) for row in rows
         ]
-
-    def gift_total(self):
-        return sum([gift.price for gift in self.gifts()])
-        # sum = 0
-        # for gift in self.gifts():
-        #     sum += gift.price
-        # return sum

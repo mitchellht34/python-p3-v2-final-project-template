@@ -1,11 +1,15 @@
 # lib/cli.py
-
+from models.recipient import Recipient
+from models.gift import Gift
+import ipdb
 from helpers import (
     exit_program,
     show_recipients,
-    recipient_menu,
-    top_menu
-    # sub_menu
+    create_recipient,
+    show_gifts,
+    create_gift,
+    delete_recipient,
+    delete_gift
 )
 
 
@@ -19,6 +23,81 @@ def main():
             top_menu()
         else:
             print("Invalid choice")
+
+def top_menu():
+    while True:
+        show_recipients()
+        print("Please select the number of the recipient to see their gifts")
+        print("OR")
+        print("Type 'a' to add a new recipient")
+        print("Type 'b' to go back")
+        print("------------------------------")
+        choice = input("> ")
+        try:
+            choice = int(choice)
+        except Exception as exc:
+            pass
+        if choice == 'a':
+            create_recipient()
+        elif choice == 'b':
+            main()
+        elif isinstance(choice, int) and choice <= len(Recipient.get_all()):
+            recipient = Recipient.find_by_id(int(choice))
+            recipient_menu(recipient)
+        else:
+            print('Invalid choice')
+            # ipdb.set_trace()
+
+def recipient_menu(recipient):
+    while True:
+        print("------------------------------")
+        print(f"{recipient.name}'s Gifts: \n")
+        gifts = show_gifts(recipient)
+        print(f'\nTotal: ${"%.2f" % sum([gift.price for gift in gifts])}')
+        print("\nPlease select the number of the recipient to see their gifts")
+        print("OR")
+        print("Type 'a' to add a new gift")
+        print("Type 'b' to go back")
+        print("Type 'd' to delete recipient")
+        print("------------------------------")
+        choice = input("> ")
+        # ipdb.set_trace()
+        try:
+            choice = int(choice)
+        except Exception as exc:
+            pass
+        if choice == 'a':
+            create_gift(recipient.id)
+        elif choice == 'b':
+            top_menu()
+        elif choice == 'd':
+            delete_recipient(recipient)
+            top_menu()
+        elif isinstance(choice, int) and choice <= len(recipient.gifts()):
+            gift_menu(choice, recipient)
+        else:
+            print('Invalid choice')
+
+def gift_menu(index, recipient):
+    while True:
+        gift = recipient.gifts()[index-1]
+        print(f"Here are the details on {recipient.name}'s selected gift: \n")
+        print(f"Name: {gift.name}")
+        print(f'Price: ${"%.2f" % gift.price}')
+        print("\nPlease select the number of the recipient to see their gifts")
+        print("OR")
+        print("Type 'b' to go back")
+        print("Type 'd' to delete gift")
+        print("------------------------------")  
+        choice = input("> ")
+        if choice == 'b':
+            recipient_menu(recipient)
+        elif choice == 'd':
+            delete_gift(gift)
+            recipient_menu(recipient)
+        else:
+            print('Invalid choice')
+
 
 
 def menu():
